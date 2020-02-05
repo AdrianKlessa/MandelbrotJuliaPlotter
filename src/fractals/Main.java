@@ -9,21 +9,19 @@ import javax.imageio.ImageIO;
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		// ImaginaryNumber C = new ImaginaryNumber(0.3,0.6);
 		
 		
 		
 		
-		ImaginaryNumber C = new ImaginaryNumber(0.08,0.12);
-		BufferedImage outputBufferedImage = Tools.generateBlackAndWhiteJulia(-2, 2, 2, -2, 16000, 16000, 100, C);
-			
+		ImaginaryNumber C = new ImaginaryNumber(0.285,0.01);
+		// BufferedImage outputBufferedImage = Tools.generateBlackAndWhiteJulia(-2, 2, 2, -2, 16000, 16000, 100, C);
+		BufferedImage outputBufferedImage = Tools.generateMandelbrot(18000,12000,100);
 		
-		File outputJPG = new File("output.jpg");
+		File outputPNG = new File("output.png");
 		try {
-			ImageIO.write(outputBufferedImage,"jpg",outputJPG);
+			ImageIO.write(outputBufferedImage,"png",outputPNG);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

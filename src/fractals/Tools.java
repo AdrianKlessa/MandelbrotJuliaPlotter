@@ -66,4 +66,37 @@ public class Tools {
 		return image;
 	}
 	
+	public static BufferedImage generateMandelbrot(int pixelsX, int pixelsY, int iterations) {
+		BufferedImage image = new BufferedImage(pixelsX,pixelsY,BufferedImage.TYPE_INT_RGB);
+		double leftX = -3;
+		double rightX=3;
+		double topY=2;
+		double bottomY=-2;
+		
+		double distanceX = Math.abs(rightX-leftX);
+		double distanceY = Math.abs(topY-bottomY);
+		double jumpsX=distanceX/pixelsX;
+		double jumpsY=distanceY/pixelsY;
+		int intWhite = RGBtoInt(255,255,255);
+		ImaginaryNumber zero = new ImaginaryNumber(0,0);
+		for(int y=0; y<pixelsY; y++) {
+			for(int x=0; x<pixelsX; x++) {
+				double currentReal = leftX+(jumpsX*x);
+				double currentImaginary = topY-(jumpsY*y);
+				ImaginaryNumber currentNumber=new ImaginaryNumber(currentReal,currentImaginary);
+				int goesToInfinity = iteratePoint(zero,currentNumber,iterations);
+				if(goesToInfinity!=-1) {
+					int blackDensity = getRedIntensity(goesToInfinity);
+					int imageColor = RGBtoInt(blackDensity,0,0);
+					image.setRGB(x,y,imageColor);
+				}else {
+					image.setRGB(x, y, intWhite);
+				}
+			}
+		}
+		
+		
+		return image;
+	}
+	
 }
