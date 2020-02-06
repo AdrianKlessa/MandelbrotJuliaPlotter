@@ -1,6 +1,8 @@
 package fractals;
 import java.awt.image.BufferedImage;
 import java.lang.Math;
+import java.time.Duration;
+import java.time.Instant;
 public class Tools {
 	static int RGBtoInt(int red, int green, int blue) {
 		int rgb=red;
@@ -34,6 +36,7 @@ public class Tools {
 	}
 	
 	public static BufferedImage generateBlackAndWhiteJulia(double leftX,double topY, double rightX, double bottomY, int pixelsX, int pixelsY, int iterations, ImaginaryNumber C) {
+		Instant start = Instant.now();
 		BufferedImage image = new BufferedImage(pixelsX,pixelsY,BufferedImage.TYPE_INT_RGB);
 		
 		double distanceX = Math.abs(rightX-leftX);
@@ -62,11 +65,13 @@ public class Tools {
 				
 			}
 		}
-		
+		Instant finish = Instant.now();
+		System.out.println("Time it took to generate image: "+Duration.between(start, finish).toMillis());
 		return image;
 	}
 	
 	public static BufferedImage generateMandelbrot(int pixelsX, int pixelsY, int iterations) {
+		Instant start = Instant.now();
 		BufferedImage image = new BufferedImage(pixelsX,pixelsY,BufferedImage.TYPE_INT_RGB);
 		double leftX = -3;
 		double rightX=3;
@@ -95,8 +100,15 @@ public class Tools {
 			}
 		}
 		
-		
+		Instant finish = Instant.now();
+		System.out.println("Time it took to generate image: "+Duration.between(start, finish).toMillis());
 		return image;
 	}
+	
+	public static void clearConsole() {
+		   System.out.print("\033[H\033[2J");  
+		   System.out.flush();
+	}
+	
 	
 }
