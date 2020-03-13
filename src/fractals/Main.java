@@ -3,27 +3,32 @@ package fractals;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.imageio.ImageIO;
 
 public class Main {
 	
-	static boolean pngMode=false;
+	static boolean pngMode=true;
 	static ColorEnum color = ColorEnum.RED;
 	static boolean terminate=false;
 	public static void main(String[] args) throws Exception {
 		// ImaginaryNumber C = new ImaginaryNumber(0.3,0.6);
 		Scanner keyboardScanner = new Scanner(System.in);
-		String userInput;
 		int inputInt;
 		int horizontalRes;
 		int verticalRes;
+		int howMany;
 		double realPart;
 		double imaginaryPart;
 		File outputFile;
 		String fileName;
 		BufferedImage outputBufferedImage;
+		ImaginaryNumber C;
+		
+		keyboardScanner.useLocale(Locale.US);
 		while(!terminate) {
 			System.out.println("Welcome to the Julia and Mandelbrot set drawer!");
 			System.out.println("Current color scheme: "+color);
@@ -37,14 +42,16 @@ public class Main {
 			System.out.println("2 - Draw a specified Julia set");
 			System.out.println("3 - Change the color scheme");
 			System.out.println("4 - Change the output file format");
-			System.out.println("5 - Exit");
+			System.out.println("5 - Create multiple random fractals");
+			System.out.println("6 - Exit");
 			inputInt=keyboardScanner.nextInt();
 			switch(inputInt) {
 			case 1:
 				System.out.println("Please provide the horizontal reslution");
 				horizontalRes=keyboardScanner.nextInt();
 				verticalRes = horizontalRes/3*2;
-				outputBufferedImage = Tools.generateMandelbrot(horizontalRes,verticalRes,100);
+				// outputBufferedImage = Tools.generateMandelbrot(horizontalRes,verticalRes,100);
+				outputBufferedImage = Tools.generateMandelbrot(horizontalRes, verticalRes, 100, color);
 				if(pngMode) {
 					outputFile = new File("Mandelbrot.png");
 					ImageIO.write(outputBufferedImage,"png",outputFile);
@@ -61,8 +68,8 @@ public class Main {
 				realPart=keyboardScanner.nextDouble();
 				System.out.println("Please provide the imaginary part of the complex number");
 				imaginaryPart = keyboardScanner.nextDouble();
-				ImaginaryNumber C = new ImaginaryNumber(realPart,imaginaryPart);
-				outputBufferedImage = Tools.generateBlackAndWhiteJulia(-2,2,2,-2,horizontalRes,verticalRes,100,C);
+				C = new ImaginaryNumber(realPart,imaginaryPart);
+				outputBufferedImage = Tools.generateJulia(-2,2,2,-2,horizontalRes,verticalRes,100,C, color);
 				if(pngMode) {
 					fileName = realPart+"+"+imaginaryPart+"i"+".png";
 					outputFile = new File(fileName);
@@ -81,27 +88,21 @@ public class Main {
 			case 4:
 				pngMode=!pngMode;
 				break;
+				
+				
 			case 5:
+				System.out.println("How many random fractals to generate?");
+				howMany=keyboardScanner.nextInt();
+				Tools.generateMultipleRandomJulia(howMany, pngMode, color);
+				break;
+			case 6:
 				terminate=true;
+				keyboardScanner.close();
+				break;
 			}
 			Tools.clearConsole();
 			
 		}
-		
-		/*
-		
-		ImaginaryNumber C = new ImaginaryNumber(0.285,0.01);
-		// BufferedImage outputBufferedImage = Tools.generateBlackAndWhiteJulia(-2, 2, 2, -2, 16000, 16000, 100, C);
-		BufferedImage outputBufferedImage = Tools.generateMandelbrot(18000,12000,100);
-		
-		File outputPNG = new File("output.png");
-		try {
-			ImageIO.write(outputBufferedImage,"png",outputPNG);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		*/
 		
 		
 	}
