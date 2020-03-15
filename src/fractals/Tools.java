@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.Math;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -180,6 +181,8 @@ public class Tools {
 	}
 	
 	public static void generateMultipleRandomJulia(int count, boolean pngMode, ColorEnum color) throws IOException {
+		Instant start = Instant.now();
+		
 		for(int i=0; i<count;i++) {
 			double randomX = ThreadLocalRandom.current().nextDouble(-1, 1);
 			double randomY = ThreadLocalRandom.current().nextDouble(-1, 1);
@@ -198,5 +201,24 @@ public class Tools {
 			}
 			
 		}
+		Instant finish = Instant.now();
+		System.out.println("Time it took to generate"+count+ "images without multithreading: "+Duration.between(start, finish).toMillis());
+	}
+	
+	public static void generateMultipleRandomJuliaMultithreaded(int count, boolean pngMode, ColorEnum color, int threadCount) throws IOException, InterruptedException{
+		Instant start = Instant.now();
+		List<Thread> threadList = new ArrayList<Thread>();
+		
+		for(int i=1; i<=threadCount;i++) {
+			JuliaThread currentThread = new JuliaThread(i, count, threadCount, pngMode, color);
+			currentThread.start();
+			threadList.add(currentThread);
+		}
+		
+		for(Thread temp : threadList) {
+			temp.join();
+		}
+		Instant finish = Instant.now();
+		System.out.println("Time it took to generate"+count+ "images with multithreading: "+Duration.between(start, finish).toMillis());
 	}
 }

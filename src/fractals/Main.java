@@ -42,8 +42,9 @@ public class Main {
 			System.out.println("2 - Draw a specified Julia set");
 			System.out.println("3 - Change the color scheme");
 			System.out.println("4 - Change the output file format");
-			System.out.println("5 - Create multiple random fractals");
-			System.out.println("6 - Exit");
+			System.out.println("5 - Create multiple random fractals (single-threaded)");
+			System.out.println("6 - Create multiple random fractals (multi-threaded)");
+			System.out.println("7 - Exit");
 			inputInt=keyboardScanner.nextInt();
 			switch(inputInt) {
 			case 1:
@@ -96,6 +97,11 @@ public class Main {
 				Tools.generateMultipleRandomJulia(howMany, pngMode, color);
 				break;
 			case 6:
+				System.out.println("How many random fractals to generate?");
+				howMany=keyboardScanner.nextInt();
+				Tools.generateMultipleRandomJuliaMultithreaded(howMany, pngMode, color, 8);
+				break;
+			case 7:
 				terminate=true;
 				keyboardScanner.close();
 				break;
